@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -130,6 +130,10 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             if (id != null && id > 0) {
                 queryWrapper.eq("id", id);
             }
+            List<Long> idList = teamQuery.getIdList();
+            if (CollectionUtils.isNotEmpty(idList)) {
+                queryWrapper.in("id", idList);
+            }
             String searchText = teamQuery.getSearchText();
             if (StringUtils.isNotBlank(searchText)) {
                 queryWrapper.and(qw -> qw.like("name", searchText).or().like("expireTime", searchText));
@@ -158,7 +162,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             if (statusEnum == null) {
                 statusEnum = TeamStatusEnum.PUBLIC;
             }
-            if (!isAdmin && !statusEnum.equals(TeamStatusEnum.PUBLIC)) {
+            if (!isAdmin && statusEnum.equals(TeamStatusEnum.PRIVATE)) {
                 throw new BusinessException(ErrorCode.NO_AUTH);
             }
             queryWrapper.eq("status", statusEnum.getValue());
@@ -167,7 +171,6 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         //不展示已过期的队伍
         //expireTime is null or expireTime > now()
         queryWrapper.and(qw -> qw.gt("expireTime", new Date()).or().isNull("expireTime"));
-
         List<Team> teamList = this.list(queryWrapper);
         if (CollectionUtils.isEmpty(teamList)) {
             return new ArrayList<>();

@@ -4,6 +4,8 @@ import com.yupi.yupao.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class TeamQuery extends PageRequest {
@@ -12,6 +14,16 @@ public class TeamQuery extends PageRequest {
      * id
      */
     private Long id;
+
+    /**
+     * id 列表
+     */
+    private List<Long> idList;
+
+    /**
+     * 搜索关键词（同时对队伍名称和描述搜索）
+     */
+    private String searchText;
 
     /**
      * 队伍名称
@@ -37,10 +49,5 @@ public class TeamQuery extends PageRequest {
      * 0 - 公开，1 - 私有，2 - 加密
      */
     private Integer status;
-
-    /**
-     * 搜索关键词（同时对队伍名称和描述搜索）
-     */
-    private String searchText;
 
 }
