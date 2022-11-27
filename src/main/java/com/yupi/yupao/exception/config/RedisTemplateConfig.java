@@ -1,4 +1,4 @@
-package com.yupi.yupao.config;
+package com.yupi.yupao.exception.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

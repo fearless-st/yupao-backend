@@ -1,4 +1,4 @@
-package com.yupi.yupao.config;
+package com.yupi.yupao.exception.config;
 
 import lombok.Data;
 import org.redisson.Redisson;
